@@ -1,0 +1,38 @@
+const { User } = require("../models");
+const { verify } = require("../helpers/jwt");
+
+const authentication = async (req, res, next) => {
+  const { authorization } = req.headers;
+  try {
+    if (!authorization) {
+      throw { name: "UNAUTHORIZED", message: "Unauthorized Error" };
+    }
+    const rawToken = authorization.split(" ");
+    if (rawToken[0] !== "Bearer" || !rawToken[1]) {
+      throw { name: "UNAUTHORIZED", message: "Unauthorized Error" };
+    }
+    let payload;
+    try {
+      payload = verify(rawToken[1]);
+    } catch (err) {
+      throw { name: "UNAUTHORIZED", message: "Invalid Token" };
+    }
+    const foundUser = await User.findOne({
+      where: {
+        id: payload.id,
+      },
+    });
+    if (!foundUser) {
+      throw { name: "NOTFOUND", message: "User not found" };
+    }
+    req.user = {
+      userId: foundUser.id,
+    };
+
+    next();
+  } catch (error) {
+    next(error);
+  }
+};
+
+module.exports = authentication;
