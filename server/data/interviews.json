@@ -1,0 +1,58 @@
+[
+  {
+    "id": 1,
+    "role": "Frontend Developer",
+    "level": "Mid-level",
+    "questions": [
+      "Explain the Virtual DOM in React",
+      "How would you optimize a slow React application?",
+      "Describe your experience with state management"
+    ],
+    "techstack": ["React", "JavaScript", "TypeScript", "CSS"],
+    "type": "Technical",
+    "finalized": true,
+    "userId": 1
+  },
+  {
+    "id": 2,
+    "role": "Backend Engineer",
+    "level": "Senior",
+    "questions": [
+      "Explain REST vs GraphQL",
+      "How would you design a scalable microservice architecture?",
+      "Describe your approach to database optimization"
+    ],
+    "techstack": ["Node.js", "PostgreSQL", "Docker", "AWS"],
+    "type": "Technical",
+    "finalized": true,
+    "userId": 2
+  },
+  {
+    "id": 3,
+    "role": "Product Manager",
+    "level": "Junior",
+    "questions": [
+      "How would you prioritize features for a new product?",
+      "Describe a time you resolved conflict between engineering and design",
+      "How do you measure product success?"
+    ],
+    "techstack": ["JIRA", "Figma", "SQL", "Agile"],
+    "type": "Behavioral",
+    "finalized": false,
+    "userId": 3
+  },
+  {
+    "id": 4,
+    "role": "Full Stack Developer",
+    "level": "Entry-level",
+    "questions": [
+      "Explain the MVC pattern",
+      "How would you implement authentication?",
+      "What's your experience with testing?"
+    ],
+    "techstack": ["React", "Node.js", "MongoDB", "Express"],
+    "type": "Technical",
+    "finalized": true,
+    "userId": 1
+  }
+]

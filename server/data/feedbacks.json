@@ -1,0 +1,102 @@
+[
+  {
+    "id": 1,
+    "interviewId": 1,
+    "userId": 1,
+    "totalScore": 8.5,
+    "categoryScores": [
+      {
+        "name": "Technical Knowledge",
+        "score": 9,
+        "comment": "Excellent understanding of React concepts"
+      },
+      {
+        "name": "Problem Solving",
+        "score": 8,
+        "comment": "Good approach to optimization questions"
+      },
+      {
+        "name": "Communication",
+        "score": 8.5,
+        "comment": "Clear and concise explanations"
+      }
+    ],
+    "strengths": [
+      "Deep React knowledge",
+      "Good practical examples",
+      "Clear communication"
+    ],
+    "areasForImprovement": [
+      "Could dive deeper into performance metrics",
+      "More TypeScript examples would help"
+    ],
+    "finalAssessment": "Strong candidate with excellent frontend skills. Would benefit from more TypeScript experience but overall very capable."
+  },
+  {
+    "id": 2,
+    "interviewId": 2,
+    "userId": 2,
+    "totalScore": 9.2,
+    "categoryScores": [
+      {
+        "name": "System Design",
+        "score": 9.5,
+        "comment": "Exceptional architectural thinking"
+      },
+      {
+        "name": "Database Knowledge",
+        "score": 9,
+        "comment": "Deep understanding of PostgreSQL optimization"
+      },
+      {
+        "name": "Cloud Experience",
+        "score": 9,
+        "comment": "Strong AWS knowledge"
+      }
+    ],
+    "strengths": [
+      "Excellent system design skills",
+      "Deep database knowledge",
+      "Clear leadership potential"
+    ],
+    "areasForImprovement": [
+      "Could discuss more failure scenarios",
+      "More cost optimization strategies"
+    ],
+    "finalAssessment": "Outstanding senior candidate with strong backend expertise. Ready for architect-level challenges."
+  },
+  {
+    "id": 3,
+    "interviewId": 4,
+    "userId": 1,
+    "totalScore": 7.0,
+    "categoryScores": [
+      {
+        "name": "Frontend Skills",
+        "score": 7.5,
+        "comment": "Good React fundamentals"
+      },
+      {
+        "name": "Backend Skills",
+        "score": 6.5,
+        "comment": "Needs more Node.js experience"
+      },
+      {
+        "name": "Database Knowledge",
+        "score": 7,
+        "comment": "Basic MongoDB understanding"
+      }
+    ],
+    "strengths": [
+      "Quick learner",
+      "Good problem-solving attitude",
+      "Solid foundational knowledge"
+    ],
+    "areasForImprovement": [
+      "Needs more backend experience",
+      "Should practice more complex database operations",
+      "Could improve testing knowledge"
+    ],
+    "finalAssessment": "Promising junior developer with good frontend skills. Would benefit from more backend experience but has strong potential."
+  }
+]

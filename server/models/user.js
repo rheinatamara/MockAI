@@ -1,20 +1,30 @@
 "use strict";
 const { Model } = require("sequelize");
 const { encode } = require("../helpers/bcrypt");
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     static associate(models) {
-      User.hasMany(models.InterviewSession, {
-        foreignKey: "UserId",
-        as: "interviewSessions",
+      User.hasMany(models.Interview, {
+        foreignKey: "userId",
       });
+      User.hasMany(models.Feedback, { foreignKey: "userId" });
     }
   }
+
   User.init(
     {
       name: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          notEmpty: {
+            msg: "Name is required",
+          },
+          notNull: {
+            msg: "Name is required",
+          },
+        },
       },
       email: {
         type: DataTypes.STRING,
@@ -57,5 +67,6 @@ module.exports = (sequelize, DataTypes) => {
       },
     }
   );
+
   return User;
 };
