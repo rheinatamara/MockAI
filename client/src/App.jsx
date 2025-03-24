@@ -1,5 +1,5 @@
 function App() {
-  return <>MockAI</>;
+  return <>App</>;
 }
 
 export default App;
