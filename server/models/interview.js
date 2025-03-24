@@ -22,7 +22,8 @@ module.exports = (sequelize, DataTypes) => {
         allowNull: false,
       },
       questions: {
-        type: DataTypes.ARRAY(DataTypes.STRING),
+        type: DataTypes.ARRAY(DataTypes.TEXT),
+        allowNull: false,
         defaultValue: [],
       },
       techstack: {
@@ -31,7 +32,6 @@ module.exports = (sequelize, DataTypes) => {
       },
       userId: {
         type: DataTypes.INTEGER,
-        allowNull: false,
         references: {
           model: "Users",
           key: "id",

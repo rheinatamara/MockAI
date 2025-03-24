@@ -19,7 +19,8 @@ module.exports = {
         allowNull: false,
       },
       questions: {
-        type: Sequelize.ARRAY(Sequelize.STRING),
+        type: Sequelize.ARRAY(Sequelize.TEXT),
+        allowNull: false,
         defaultValue: [],
       },
       techstack: {
