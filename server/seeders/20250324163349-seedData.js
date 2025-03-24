@@ -17,7 +17,6 @@ module.exports = {
     });
     await queryInterface.bulkInsert("Users", [
       {
-        id: 1,
         name: "John Doe",
         email: "john@mail.com",
         password: encode("12345"),
@@ -25,7 +24,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 2,
         name: "Jane Doe",
         email: "jane@mail.com",
         password: encode("12345"),
@@ -33,7 +31,6 @@ module.exports = {
         updatedAt: new Date(),
       },
       {
-        id: 3,
         name: "Will Smith",
         email: "will@mail.com",
         password: encode("12345"),
