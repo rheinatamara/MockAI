@@ -45,15 +45,12 @@ class InterviewController {
         ],
       });
 
-      // If the interview is not found, throw an error
       if (!interview) {
         throw {
           name: "NOTFOUND",
           message: "Interview not found",
         };
       }
-
-      // Respond with the interview details
       res.status(200).json(interview);
     } catch (error) {
       console.error("Error in getInterviewById:", error);

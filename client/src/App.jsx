@@ -1,3 +1,4 @@
+import Agent from "./pages/Agent";
 import Feedback from "./pages/Feedback";
 import Home from "./pages/Home";
 import Interview from "./pages/Interview";
@@ -9,6 +10,7 @@ function App() {
       <Route path="/register" element={<h1>Register</h1>} />
       {/* <Route element={<MainLayout />}> */}
       <Route path="/" element={<Home />} />
+      <Route path="/agent" element={<Agent />} />
       <Route path="/interview" element={<Interview />} />
       <Route path="/:interviewId/feedback" element={<Feedback />} />
       {/* </Route> */}

@@ -41,5 +41,32 @@ class Controller {
       next(error);
     }
   }
+  static async updateProfile(req, res, next) {
+    try {
+      const { userId } = req.user;
+      const { name, email, password } = req.body;
+      const user = await User.findByPk(userId);
+      if (!user) {
+        throw { name: "NOTFOUND", message: "User not found" };
+      }
+      if (name) user.name = name;
+      if (email) user.email = email;
+      if (password) user.password = password;
+
+      await user.save();
+
+      res.status(200).json({
+        message: "Profile updated successfully",
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+        },
+      });
+    } catch (error) {
+      console.error("Error in updateProfile:", error);
+      next(error);
+    }
+  }
 }
 module.exports = Controller;
