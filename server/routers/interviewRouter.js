@@ -7,7 +7,7 @@ interview.get(
   "/:interviewId/feedback",
   InterviewController.getFeedbackByInterviewId
 );
-interview.post("/create", InterviewController.createInterview);
+interview.post("/", InterviewController.createInterview);
 // Create feedback for an interview
 interview.post("'/:interviewId/feedback");
 // delete interview

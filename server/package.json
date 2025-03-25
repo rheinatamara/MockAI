@@ -1,6 +1,5 @@
 {
   "dependencies": {
-    "@ai-sdk/google": "^1.2.2",
     "@google/generative-ai": "^0.24.0",
     "ai": "^4.2.2",
     "axios": "^1.8.4",
