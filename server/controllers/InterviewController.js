@@ -1,8 +1,45 @@
-const { Interview } = require("../models");
+const { Interview, Feedback } = require("../models");
 const { google } = require("@ai-sdk/google");
 const { generateText } = require("ai");
 
 class InterviewController {
+  static async getInterviews(req, res, next) {
+    try {
+      const { userId } = req.user;
+      const interviews = await Interview.findAll({
+        where: { userId },
+        include: [
+          {
+            model: Feedback,
+            attributes: ["id", "totalScore", "createdAt"],
+          },
+        ],
+        order: [["createdAt", "DESC"]],
+      });
+      res.status(200).json(interviews);
+    } catch (error) {
+      console.error("Error in getInterviews:", error);
+      next(error);
+    }
+  }
+  static async getFeedbackByInterviewId(req, res, next) {
+    try {
+      const { interviewId } = req.params;
+      const { userId } = req.user;
+      const feedback = await Feedback.findOne({
+        where: { interviewId, userId },
+      });
+      if (!feedback) {
+        throw {
+          name: "NOTFOUND",
+          message: "Feedback not found",
+        };
+      }
+      res.status(200).json(feedback);
+    } catch (error) {
+      next(error);
+    }
+  }
   static async createInterview(req, res, next) {
     try {
       const { type, role, level, techstack, amount } = req.body;
