@@ -10,7 +10,6 @@ function App() {
       <Route path="/register" element={<h1>Register</h1>} />
       {/* <Route element={<MainLayout />}> */}
       <Route path="/" element={<Home />} />
-      <Route path="/agent" element={<Agent />} />
       <Route path="/interview" element={<Interview />} />
       <Route path="/:interviewId/feedback" element={<Feedback />} />
       {/* </Route> */}
