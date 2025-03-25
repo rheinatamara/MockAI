@@ -49,6 +49,21 @@ module.exports = (sequelize, DataTypes) => {
         type: DataTypes.TEXT,
         allowNull: false,
       },
+      createdAt: {
+        type: DataTypes.DATE,
+        allowNull: false,
+        get() {
+          const rawDate = this.getDataValue("createdAt");
+          if (rawDate) {
+            return rawDate.toLocaleDateString("en-US", {
+              year: "numeric",
+              month: "short",
+              day: "2-digit",
+            });
+          }
+          return null;
+        },
+      },
     },
     {
       sequelize,

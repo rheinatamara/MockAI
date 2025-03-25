@@ -6,7 +6,7 @@ interview.get("/", InterviewController.getInterviews); //get user's interview
 interview.get(
   "/:interviewId/feedback",
   InterviewController.getFeedbackByInterviewId
-); //get feedbackByInterviewId
+);
 interview.post("/create", InterviewController.createInterview);
 // Create feedback for an interview
 interview.post("'/:interviewId/feedback");

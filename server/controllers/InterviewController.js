@@ -25,17 +25,32 @@ class InterviewController {
   static async getFeedbackByInterviewId(req, res, next) {
     try {
       const { interviewId } = req.params;
-      const { userId } = req.user;
-      const feedback = await Feedback.findOne({
-        where: { interviewId, userId },
+      const interview = await Interview.findOne({
+        where: { id: interviewId, finalized: true },
+        include: [
+          {
+            model: Feedback,
+            attributes: [
+              "id",
+              "totalScore",
+              "categoryScores",
+              "strengths",
+              "areasForImprovement",
+              "finalAssessment",
+              "createdAt",
+            ],
+          },
+        ],
       });
-      if (!feedback) {
+
+      if (!interview) {
         throw {
           name: "NOTFOUND",
-          message: "Feedback not found",
+          message: "Interview not found or not finalized",
         };
       }
-      res.status(200).json(feedback);
+
+      res.status(200).json(interview.Feedbacks);
     } catch (error) {
       next(error);
     }
@@ -49,7 +64,7 @@ class InterviewController {
         : techstack.split(",").map((item) => item.trim());
 
       const { text } = await generateText({
-        model: google("gemini-2.0-flash-001"),
+        model: google("gemini-2.0-flash"),
         prompt: `Prepare questions for a job interview.
             The job role is ${role}.
             The job experience level is ${level}.
