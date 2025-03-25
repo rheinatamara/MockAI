@@ -22,6 +22,44 @@ class InterviewController {
       next(error);
     }
   }
+  static async getInterviewById(req, res, next) {
+    try {
+      const { interviewId } = req.params;
+
+      // Find the interview by ID
+      const interview = await Interview.findOne({
+        where: { id: interviewId },
+        include: [
+          {
+            model: Feedback,
+            attributes: [
+              "id",
+              "totalScore",
+              "categoryScores",
+              "strengths",
+              "areasForImprovement",
+              "finalAssessment",
+              "createdAt",
+            ],
+          },
+        ],
+      });
+
+      // If the interview is not found, throw an error
+      if (!interview) {
+        throw {
+          name: "NOTFOUND",
+          message: "Interview not found",
+        };
+      }
+
+      // Respond with the interview details
+      res.status(200).json(interview);
+    } catch (error) {
+      console.error("Error in getInterviewById:", error);
+      next(error);
+    }
+  }
   static async getFeedbackByInterviewId(req, res, next) {
     try {
       const { interviewId } = req.params;

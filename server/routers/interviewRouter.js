@@ -3,6 +3,7 @@ const InterviewController = require("../controllers/InterviewController");
 
 const interview = express.Router();
 interview.get("/", InterviewController.getInterviews); //get user's interview
+interview.get("/:interviewId", InterviewController.getInterviewById); //get user's interview
 interview.get(
   "/:interviewId/feedback",
   InterviewController.getFeedbackByInterviewId
