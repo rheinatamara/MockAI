@@ -1,6 +1,7 @@
 const { decode, encode } = require("../helpers/bcrypt");
 const { sign } = require("../helpers/jwt");
 const { User } = require("../models");
+const { OAuth2Client } = require("google-auth-library");
 class Controller {
   static async register(req, res, next) {
     try {
@@ -38,6 +39,36 @@ class Controller {
       res.status(200).json({ access_token });
     } catch (error) {
       console.log(error, "<<<");
+      next(error);
+    }
+  }
+  static async googleLogin(req, res, next) {
+    try {
+      const client = new OAuth2Client();
+      const { googleToken } = req.body;
+      console.log(googleToken, "<<<");
+      if (!googleToken) {
+        throw { name: "BADREQUEST", message: "Google token is required" };
+      }
+      const ticket = await client.verifyIdToken({
+        idToken: googleToken,
+        audience: process.env.GOOGLE_CLIENT_ID,
+      });
+      const payload = ticket.getPayload();
+      console.log(payload);
+      const [user] = await User.findOrCreate({
+        where: {
+          email: payload.email,
+        },
+        defaults: {
+          name: payload.name,
+          email: payload.email,
+          password: `${Math.random()}+${Date.now()}`,
+        },
+      });
+      const access_token = sign({ id: user.id });
+      res.json({ access_token });
+    } catch (error) {
       next(error);
     }
   }

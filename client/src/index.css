@@ -10,3 +10,7 @@ body {
   padding: 0;
   min-height: 100vh;
 }
+
+#google-btn {
+  width: 100%;
+}

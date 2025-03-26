@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import http from "../http";
 import { useNavigate, Link } from "react-router";
 import Swal from "sweetalert2";
@@ -29,6 +29,38 @@ export default function Login() {
       });
     }
   };
+  async function handleCredentialResponse(response) {
+    try {
+      const { data } = await http({
+        method: "POST",
+        url: "/google-login",
+        data: {
+          googleToken: response.credential,
+        },
+      });
+      localStorage.setItem("access_token", data.access_token);
+      navigate("/");
+    } catch (error) {
+      Swal.fire({
+        icon: "error",
+        title: "Oops...",
+        text: error.response.data.message,
+      });
+    }
+  }
+  useEffect(() => {
+    window.onload = function () {
+      google.accounts.id.initialize({
+        client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+        callback: handleCredentialResponse,
+      });
+      google.accounts.id.renderButton(
+        document.getElementById("google-btn"),
+        { theme: "outline", size: "large", shape: "pill", width: "100%" } // customization attributes
+      );
+      // google.accounts.id.prompt(); // also display the One Tap dialog
+    };
+  }, []);
   return (
     <div className="flex items-center justify-center min-h-screen ">
       <div className="w-full max-w-md p-8 mx-auto bg-gradient-to-b from-gray-900 to-black rounded-2xl border border-[#222222]">
@@ -92,8 +124,14 @@ export default function Login() {
             type="submit"
             className="w-full cursor-pointer py-3 mt-6 text-center bg-[#b4a7ff] hover:bg-[#a395ff] text-black font-medium rounded-full transition-colors"
           >
-            Login
+            Sign In
           </button>
+          <div className="flex items-center my-4 mb-5">
+            <div className="flex-grow border-t border-gray-600"></div>
+            <span className="mx-4 text-gray-500">or</span>
+            <div className="flex-grow border-t border-gray-600"></div>
+          </div>
+          <div id="google-btn"></div>
           <p className="text-white text-center items-center">
             Don't have an account?{" "}
             <Link to="/register " className="underline">
