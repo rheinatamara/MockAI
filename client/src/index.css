@@ -1,11 +1,11 @@
 @import "tailwindcss";
 body {
-  background-color: #0e0a1f; /* Dark background color */
-  background-image: url("./assets/pattern.png"); /* Add the pattern */
-  background-repeat: repeat; /* Repeat the pattern */
-  background-size: auto; /* Keep the original size of the pattern */
-  color: white; /* Ensure text is readable on the background */
-  font-family: "Inter", sans-serif; /* Optional: Set a default font */
+  background-color: #0e0a1f;
+  background-image: url("./assets/pattern.png");
+  background-repeat: repeat;
+  background-size: auto;
+  color: white;
+  font-family: "Inter", sans-serif;
   margin: 0;
   padding: 0;
   min-height: 100vh;

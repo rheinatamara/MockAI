@@ -1,6 +1,7 @@
 import React from "react";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 export default function Navbar() {
+  const navigate = useNavigate();
   return (
     <header className=" flex justify-between items-center p-4 border-b border-gray-800">
       <div className="flex items-center gap-2">
@@ -18,7 +19,8 @@ export default function Navbar() {
       <button
         className="cursor-pointer hover:text-gray-300"
         onClick={() => {
-          console.log("Logout");
+          localStorage.removeItem("access_token");
+          navigate("/login");
         }}
       >
         Logout

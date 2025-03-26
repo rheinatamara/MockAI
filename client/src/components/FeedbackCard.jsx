@@ -1,15 +1,17 @@
 import React from "react";
 
-export default function Card({ title, description, type, techstack, onClick }) {
+export default function FeedbackCard({ title, type, techstack, onClick }) {
   return (
-    <div className="bg-[#121212] rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow">
+    <div className="bg-[#121212] rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow border border-gray-800">
       {/* Header */}
       <div className="flex justify-between items-center mb-4">
         <div className="flex items-center gap-2">
           <div className="w-10 h-10 rounded-full bg-purple-500 flex items-center justify-center">
-            <img src={""} alt="Logo" className="w-6 h-6 object-contain" />
+            <p className="text-lg">💬</p>
           </div>
-          <h3 className="text-white font-semibold text-lg">{title}</h3>
+          <h3 className="text-white font-semibold text-lg">
+            {title} Interview
+          </h3>
         </div>
         <span className="text-sm text-gray-400 bg-gray-800 px-2 py-1 rounded-full">
           {type}
@@ -17,20 +19,22 @@ export default function Card({ title, description, type, techstack, onClick }) {
       </div>
 
       {/* Description */}
-      <p className="text-gray-400 text-sm mb-4 line-clamp-3">{description}</p>
+      <p className="text-gray-400 text-sm mb-4 line-clamp-3">
+        {" "}
+        This interview is purely for practice and skill improvement. It does not
+        indicate serious interest in a specific job or role. The purpose is to
+        help users refine their interview skills, gain confidence, and receive
+        constructive feedback in a risk-free environment.
+      </p>
 
       {/* Tech Stack */}
       <div className="flex items-center gap-2 mb-4">
         {techstack.map((tech, index) => (
           <div
             key={index}
-            className="w-6 h-6 rounded-full bg-gray-800 flex items-center justify-center"
+            className="rounded-full px-4 bg-[#6c47ff] py-2 flex items-center justify-center text-white text-xs"
           >
-            <img
-              src={`/assets/icons/${tech.toLowerCase()}.svg`}
-              alt={tech}
-              className="w-4 h-4"
-            />
+            <p>{tech}</p>
           </div>
         ))}
       </div>
@@ -40,7 +44,7 @@ export default function Card({ title, description, type, techstack, onClick }) {
         onClick={onClick}
         className="w-full bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition-colors cursor-pointer"
       >
-        Take interview
+        View Interview
       </button>
     </div>
   );

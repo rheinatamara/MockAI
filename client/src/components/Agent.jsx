@@ -135,7 +135,8 @@ const Agent = ({
               "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzQyOTI5OTI5fQ.3vl6XSEN9PKeAwNJn1AI1DhbJ1KkQOoJH7lSLAN4S58",
           },
         });
-        setCallStatus(CallStatus.ACTIVE);
+
+        // Listen for variable updates
         vapi.on("variable-updated", (update) => {
           setCollectedData((prev) => {
             const updatedData = { ...prev, ...update.variables };
@@ -147,9 +148,17 @@ const Agent = ({
           });
         });
 
-        vapi.on("call-ended", () => {
-          console.log("Final Collected Data:", collectedDataRef.current);
+        // Listen for call-ended event
+        vapi.on("call-ended", (endData) => {
+          if (endData && endData.variables) {
+            console.log("Final Collected Data:", endData.variables);
+            setCollectedData(endData.variables); // Store the final data in state
+          } else {
+            console.error("Call ended without data.");
+          }
         });
+
+        setCallStatus(CallStatus.ACTIVE);
       } catch (startError) {
         console.error("Start error:", startError);
         setCallStatus(CallStatus.INACTIVE);
@@ -161,7 +170,7 @@ const Agent = ({
           .map((question) => `- ${question}`)
           .join("\n");
       }
-
+      // console.log(formattedQuestions, "<<");
       await vapi.start(interviewer, {
         variableValues: {
           questions: formattedQuestions,
@@ -242,6 +251,14 @@ const Agent = ({
             End
           </button>
         )}
+        {/* {collectedData && (
+          <div className="collected-data">
+            <h3 className="text-xl font-bold mb-4">Collected Data:</h3>
+            <pre className="bg-gray-800 text-white p-4 rounded-md">
+              {JSON.stringify(collectedData, null, 2)}
+            </pre>
+          </div>
+        )} */}
       </div>
     </>
   );

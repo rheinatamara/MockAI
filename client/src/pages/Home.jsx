@@ -1,31 +1,49 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router";
-import Card from "../components/Card";
+import Card from "../components/InterviewCard";
+import Swal from "sweetalert2";
+import http from "../http";
+import InterviewCard from "../components/InterviewCard";
+import FeedbackCard from "../components/FeedbackCard";
 
 export default function Home() {
-  const interviews = [
-    {
-      title: "Full-Stack Dev Interview",
-      description:
-        "This interview does not reflect serious interest or engagement from the candidate. Their responses are dismissive...",
-      type: "Technical",
-      techstack: ["React", "Node.js"],
-    },
-    {
-      title: "Backend Dev Interview",
-      description:
-        "This interview focuses on backend development skills, including database optimization and API design.",
-      type: "Technical",
-      techstack: ["PostgreSQL", "Docker"],
-    },
-    {
-      title: "Product Manager Interview",
-      description:
-        "This interview evaluates your ability to prioritize features, resolve conflicts, and measure product success.",
-      type: "Behavioral",
-      techstack: ["JIRA", "Figma"],
-    },
-  ];
+  const [interviewData, setInterviewData] = useState([]);
+  const [completedData, setCompletedData] = useState([]);
+  async function fetchActiveData() {
+    try {
+      const { data } = await http({
+        method: "GET",
+        url: "/interview/active",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+      setInterviewData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async function fetchCompletedData() {
+    try {
+      const { data } = await http({
+        method: "GET",
+        url: "/interview/completed",
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+      setCompletedData(data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  useEffect(() => {
+    fetchActiveData();
+  }, []);
+  useEffect(() => {
+    fetchCompletedData();
+  }, []);
+
   return (
     <div className="min-h-screen ">
       {/* Hero Section */}
@@ -59,16 +77,13 @@ export default function Home() {
           <div className="bg-blue-200 p-2 rounded-lg w-7 h-7"></div>
         </div>
       </section>
-
-      {/* Past Interviews Section */}
       <section className="px-4 md:px-8 py-6">
         <h2 className="text-xl font-bold mb-4">Your Past Interviews</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {interviews.map((interview, index) => (
-            <Card
-              key={index}
-              title={interview.title}
-              description={interview.description}
+          {completedData.map((interview) => (
+            <FeedbackCard
+              key={interview.id}
+              title={interview.role}
               type={interview.type}
               techstack={interview.techstack}
               onClick={() => console.log(`Starting ${interview.title}`)}
@@ -76,19 +91,16 @@ export default function Home() {
           ))}
         </div>
       </section>
-
-      {/* Pick Your Interview Section */}
       <section className="px-4 md:px-8 py-6">
         <h2 className="text-xl font-bold mb-4">Pick Your Interview</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {interviews.map((interview, index) => (
-            <Card
-              key={index}
-              title={interview.title}
-              description={interview.description}
+          {interviewData.map((interview) => (
+            <InterviewCard
+              key={interview.id}
+              id={interview.id}
+              title={interview.role}
               type={interview.type}
               techstack={interview.techstack}
-              onClick={() => console.log(`Starting ${interview.title}`)}
             />
           ))}
         </div>

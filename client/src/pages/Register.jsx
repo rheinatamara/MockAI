@@ -35,8 +35,8 @@ export default function Register() {
     }
   };
   return (
-    <div className="flex items-center justify-center min-h-screen bg-black">
-      <div className="w-full max-w-md p-8 mx-auto bg-[#121212] rounded-2xl border border-[#222222]">
+    <div className="flex items-center justify-center min-h-screen">
+      <div className="w-full max-w-md p-8 mx-auto bg-gradient-to-b from-gray-900 to-black rounded-2xl border border-[#222222]">
         <div className="flex flex-col items-center mb-6">
           <div className="flex items-center gap-1 text-white text-xl font-medium">
             <span className="text-white/90">💬</span>
@@ -45,6 +45,24 @@ export default function Register() {
           <h1 className="mt-4 text-xl text-white font-medium text-center">
             Practice job interviews with AI
           </h1>
+        </div>
+        <div className="absolute top-10 right-[20%] animate-float-slow">
+          <div className="bg-green-200 p-2 rounded-lg w-10 h-10"></div>
+        </div>
+        <div className="absolute bottom-50 right-[20%] animate-float-slow">
+          <div className="bg-purple-200 p-2 rounded-lg w-10 h-10"></div>
+        </div>
+        <div className="absolute top-16 right-[10%] animate-float">
+          <div className="bg-pink-200 p-2 rounded-lg w-8 h-8"></div>
+        </div>
+        <div className="absolute bottom-10 left-[20%] animate-float-slow">
+          <div className="bg-yellow-200 p-2 rounded-lg w-9 h-9"></div>
+        </div>
+        <div className="absolute top-80 left-[20%] animate-float-slow">
+          <div className="bg-purple-200 p-2 rounded-lg w-9 h-9"></div>
+        </div>
+        <div className="absolute bottom-16 left-[10%] animate-float">
+          <div className="bg-blue-200 p-2 rounded-lg w-7 h-7"></div>
         </div>
 
         <form className="space-y-4" onSubmit={handleSubmit}>
