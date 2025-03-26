@@ -1,8 +1,9 @@
 "use client";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router";
 import { vapi } from "../lib/vapi";
 import { interviewer } from "../constants";
+import avatar from "../assets/user-avatar.png";
 const CallStatus = {
   INACTIVE: "INACTIVE",
   CONNECTING: "CONNECTING",
@@ -17,13 +18,26 @@ const Agent = ({
   feedbackId,
   type,
   questions,
+  title,
 }) => {
   const navigate = useNavigate();
   const [callStatus, setCallStatus] = useState(CallStatus.INACTIVE);
   const [messages, setMessages] = useState([]);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [lastMessage, setLastMessage] = useState("");
+  const [collectedData, setCollectedData] = useState({
+    role: "",
+    type: "",
+    level: "",
+    amount: "",
+    techstack: "",
+  });
+  const collectedDataRef = useRef(collectedData);
 
+  useEffect(() => {
+    collectedDataRef.current = collectedData;
+    console.log("Collected Data updated (useEffect):", collectedData);
+  }, [collectedData]);
   useEffect(() => {
     const onCallStart = () => {
       setCallStatus(CallStatus.ACTIVE);
@@ -111,14 +125,34 @@ const Agent = ({
         await vapi.start(import.meta.env.VITE_VAPI_WORKFLOW_ID, {
           variableValues: {
             username: userName,
-            userid: userId,
+            userId: userId,
+            role: "Frontend Developer",
+            type: "Technical",
+            level: "Mid-level",
+            amount: "5",
+            techstack: "React, Node.js",
+            access_token:
+              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzQyOTI5OTI5fQ.3vl6XSEN9PKeAwNJn1AI1DhbJ1KkQOoJH7lSLAN4S58",
           },
         });
-        console.log("masuk kok");
-      } catch (error) {
-        console.error("Vapi start error:", error);
-        console.log("Workflow ID:", import.meta.env.VITE_VAPI_WORKFLOW_ID);
-        console.log("Assistant ID:", import.meta.env.VITE_VAPI_ASSISTANT_ID);
+        setCallStatus(CallStatus.ACTIVE);
+        vapi.on("variable-updated", (update) => {
+          setCollectedData((prev) => {
+            const updatedData = { ...prev, ...update.variables };
+            console.log(
+              "Updated state (inside variable-updated):",
+              updatedData
+            );
+            return updatedData;
+          });
+        });
+
+        vapi.on("call-ended", () => {
+          console.log("Final Collected Data:", collectedDataRef.current);
+        });
+      } catch (startError) {
+        console.error("Start error:", startError);
+        setCallStatus(CallStatus.INACTIVE);
       }
     } else {
       let formattedQuestions = "";
@@ -143,46 +177,38 @@ const Agent = ({
 
   return (
     <>
-      <div className="call-view">
+      <h2 className="text-3xl font-bold mb-8 mt-8">{title}</h2>
+      <div className="call-view grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
         {/* AI Interviewer Card */}
-        <div className="card-interviewer">
-          <div className="avatar">
-            <img
-              src="/ai-avatar.png"
-              alt="profile-image"
-              className="object-cover"
-              width={65}
-              height={54}
-            />
-            {isSpeaking && <span className="animate-speak" />}
+        <div className="card-interviewer border border-gray-700 rounded-xl p-6 flex flex-col items-center justify-center bg-[#1a1a2e] h-96 ">
+          <div className="avatar w-24 h-24 bg-[#e0d9ff] rounded-full flex items-center justify-center mb-6 relative">
+            {" "}
+            <p className="text-4xl">💬</p>
+            {/* <div className="w-64">💬</div> */}
+            {isSpeaking && (
+              <span className="animate-speak absolute w-full h-full rounded-full border-4 border-white animate-ping opacity-75" />
+            )}
           </div>
-          <h3>AI Interviewer</h3>
+          <h3 className="text-2xl font-semibold">AI Interviewer</h3>
         </div>
 
         {/* User Profile Card */}
-        <div className="card-border">
-          <div className="card-content">
-            <img
-              src="/user-avatar.png"
-              alt="profile-image"
-              className="rounded-full object-cover size-[120px]"
-              width={539}
-              height={539}
-            />
-            <h3>{userName}</h3>
+        <div className="card-border border border-gray-700 rounded-xl overflow-hidden">
+          <div className="card-content flex flex-col items-center justify-center bg-[#1a1a2e] h-96">
+            <div className="w-24 h-24 rounded-full overflow-hidden mb-6">
+              <img src={avatar} alt="profile-image" className="rounded-full" />
+            </div>
+            <h3 className="text-2xl font-semibold">{userName}</h3>
           </div>
         </div>
       </div>
 
       {messages.length > 0 && (
-        <div className="transcript-border">
-          <div className="transcript">
+        <div className="transcript-border border border-gray-700 rounded-full mb-8">
+          <div className="transcript p-4 text-center text-gray-300">
             <p
               key={lastMessage}
-              className={
-                ("transition-opacity duration-500 opacity-0",
-                "animate-fadeIn opacity-100")
-              }
+              className="transition-opacity duration-500 animate-fadeIn opacity-100"
             >
               {lastMessage}
             </p>
@@ -193,14 +219,13 @@ const Agent = ({
       <div className="w-full flex justify-center">
         {callStatus !== "ACTIVE" ? (
           <button
-            className="bg-blue-500 text-white px-20 py-5"
+            className="bg-blue-500 hover:bg-blue-600 text-white font-medium py-3 px-12 rounded-full relative"
             onClick={handleCall}
           >
             <span
-              className={
-                ("absolute animate-ping rounded-full opacity-75",
-                callStatus !== "CONNECTING" && "hidden")
-              }
+              className={`absolute w-full h-full rounded-full animate-ping opacity-75 ${
+                callStatus !== "CONNECTING" && "hidden"
+              }`}
             />
 
             <span className="relative">
@@ -210,7 +235,10 @@ const Agent = ({
             </span>
           </button>
         ) : (
-          <button className="btn-disconnect" onClick={handleDisconnect}>
+          <button
+            className="btn-disconnect bg-red-500 hover:bg-red-600 text-white font-medium py-3 px-12 rounded-full"
+            onClick={handleDisconnect}
+          >
             End
           </button>
         )}

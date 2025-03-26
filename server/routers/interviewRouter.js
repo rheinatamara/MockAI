@@ -2,18 +2,15 @@ const express = require("express");
 const InterviewController = require("../controllers/InterviewController");
 
 const interview = express.Router();
-interview.get("/", InterviewController.getInterviews); //get user's interview
-interview.get("/:interviewId", InterviewController.getInterviewById); //get user's interview
+interview.get("/active", InterviewController.getActiveInterviews);
+interview.get("/completed", InterviewController.getCompletedInterviews);
+interview.get("/:interviewId", InterviewController.getInterviewById);
 interview.get(
   "/:interviewId/feedback",
   InterviewController.getFeedbackByInterviewId
 );
 interview.post("/", InterviewController.createInterview);
-// Create feedback for an interview
 interview.post("'/:interviewId/feedback");
-// delete interview
-interview.delete("'/:interviewId");
-
-// Jangan lupa endpoint buat make call dan end call untuk VAPI
+interview.delete("'/:interviewId", InterviewController.deleteInterview);
 
 module.exports = interview;

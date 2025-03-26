@@ -3,11 +3,36 @@ const { GoogleGenerativeAI } = require("@google/generative-ai");
 const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
 
 class InterviewController {
-  static async getInterviews(req, res, next) {
+  static async getActiveInterviews(req, res, next) {
     try {
       const { userId } = req.user;
       const interviews = await Interview.findAll({
-        where: { userId },
+        where: {
+          userId,
+          finalized: false,
+        },
+        include: [
+          {
+            model: Feedback,
+            attributes: ["id", "totalScore", "createdAt"],
+          },
+        ],
+        order: [["createdAt", "DESC"]],
+      });
+      res.status(200).json(interviews);
+    } catch (error) {
+      console.error("Error in getInterviews:", error);
+      next(error);
+    }
+  }
+  static async getCompletedInterviews(req, res, next) {
+    try {
+      const { userId } = req.user;
+      const interviews = await Interview.findAll({
+        where: {
+          userId,
+          finalized: true,
+        },
         include: [
           {
             model: Feedback,
@@ -25,8 +50,6 @@ class InterviewController {
   static async getInterviewById(req, res, next) {
     try {
       const { interviewId } = req.params;
-
-      // Find the interview by ID
       const interview = await Interview.findOne({
         where: { id: interviewId },
         include: [
@@ -92,8 +115,13 @@ class InterviewController {
   }
   static async createInterview(req, res, next) {
     try {
+      console.log("Raw request body:", req.body);
       const { type, role, level, techstack, amount } = req.body;
       const { userId } = req.user;
+
+      console.log("Extracted fields:", type, role, level, techstack, amount);
+      res.status(201).json({ message: "Interview created successfully" });
+
       const prompt = `Prepare questions for a job interview.
         The job role is ${role}.
         The job experience level is ${level}.
@@ -134,11 +162,29 @@ class InterviewController {
         techstack: techstack.split(","),
         questions,
         userId,
-        finalized: true,
+        finalized: false,
       });
       res.status(201).json(interview);
     } catch (error) {
       console.error("Error in createInterview:", error);
+      next(error);
+    }
+  }
+  static async deleteInterview(req, res, next) {
+    try {
+      const { interviewId } = req.params;
+      const interview = await Interview.findByPk(interviewId);
+
+      if (!interview) {
+        throw {
+          name: "NOTFOUND",
+          message: "Interview not found",
+        };
+      }
+      await interview.destroy();
+      res.status(200).json({ message: "Interview deleted successfully" });
+    } catch (error) {
+      console.error("Error in deleteInterview:", error);
       next(error);
     }
   }
