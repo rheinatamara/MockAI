@@ -16,15 +16,36 @@ export default function Navbar() {
           💬 MockAI
         </Link>
       </div>
-      <button
-        className="cursor-pointer hover:text-gray-300"
-        onClick={() => {
-          localStorage.removeItem("access_token");
-          navigate("/login");
-        }}
-      >
-        Logout
-      </button>
+      <div className="flex gap-4">
+        <button
+          className="cursor-pointer hover:text-gray-300"
+          onClick={() => {
+            localStorage.removeItem("access_token");
+            navigate("/login");
+          }}
+        >
+          Logout
+        </button>
+        <button
+          onClick={() => navigate("/edit")}
+          className=" hover:text-gray-300 cursor-pointer"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path>
+            <circle cx="12" cy="7" r="4"></circle>
+          </svg>
+        </button>
+      </div>
     </header>
   );
 }

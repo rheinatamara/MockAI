@@ -9,6 +9,7 @@ import MainLayout from "./components/PrivateLayout";
 import PrivateLayout from "./components/PrivateLayout";
 import PublicLayout from "./components/PublicLayout";
 import Generate from "./pages/Generate";
+import Edit from "./pages/Edit";
 function App() {
   return (
     <Routes>
@@ -19,6 +20,7 @@ function App() {
       <Route element={<PrivateLayout />}>
         <Route path="/" element={<Home />} />
         <Route path="/generate" element={<Generate />} />
+        <Route path="/edit" element={<Edit />} />
         <Route path="/interview/:interviewId" element={<Interview />} />
         <Route path="/:interviewId/feedback" element={<Feedback />} />
       </Route>

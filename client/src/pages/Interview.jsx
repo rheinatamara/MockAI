@@ -36,7 +36,7 @@ export default function Interview() {
   return (
     <div className="min-h-screen bg-black text-white flex flex-col p-8">
       <Agent
-        userName="rheina"
+        userName="You"
         userId={1}
         type="interview"
         title="AI Interview"

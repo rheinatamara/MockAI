@@ -82,7 +82,7 @@ const Agent = ({
     const handleGenerateFeedback = async (messages) => {
       console.log("handleGenerateFeedback");
 
-      await http.post(
+      const response = await http.post(
         `/interview/${interviewId}/feedback`,
         { transcript: JSON.stringify(messages) },
         {
@@ -92,20 +92,13 @@ const Agent = ({
           },
         }
       );
-      // CREATE FEEDBACK
-      // const { success, feedbackId: id } = await createFeedback({
-      //   interviewId: interviewId,
-      //   userId: userId,
-      //   transcript: messages,
-      //   feedbackId,
-      // });
-
-      // if (success && id) {
-      //   navigate(`/interview/${interviewId}/feedback`);
-      // } else {
-      //   console.log("Error saving feedback");
-      //   navigate("/");
-      // }
+      console.log(response);
+      if (response.status === 201 || response.status === 202) {
+        navigate(`/${interviewId}/feedback`);
+      } else {
+        console.error("Unexpected response status:", response.status);
+        alert("Something went wrong while generating feedback.");
+      }
     };
 
     if (callStatus === CallStatus.FINISHED) {
@@ -221,14 +214,6 @@ const Agent = ({
             End
           </button>
         )}
-        {/* {collectedData && (
-          <div className="collected-data">
-            <h3 className="text-xl font-bold mb-4">Collected Data:</h3>
-            <pre className="bg-gray-800 text-white p-4 rounded-md">
-              {JSON.stringify(collectedData, null, 2)}
-            </pre>
-          </div>
-        )} */}
       </div>
     </>
   );

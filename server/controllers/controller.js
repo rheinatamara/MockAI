@@ -1,4 +1,4 @@
-const { decode } = require("../helpers/bcrypt");
+const { decode, encode } = require("../helpers/bcrypt");
 const { sign } = require("../helpers/jwt");
 const { User } = require("../models");
 class Controller {
@@ -44,27 +44,35 @@ class Controller {
   static async updateProfile(req, res, next) {
     try {
       const { userId } = req.user;
-      const { name, email, password } = req.body;
+      const { email, password } = req.body;
       const user = await User.findByPk(userId);
       if (!user) {
         throw { name: "NOTFOUND", message: "User not found" };
       }
-      if (name) user.name = name;
       if (email) user.email = email;
-      if (password) user.password = password;
-
+      if (password) user.password = encode(password);
       await user.save();
-
       res.status(200).json({
         message: "Profile updated successfully",
-        user: {
-          id: user.id,
-          name: user.name,
-          email: user.email,
-        },
       });
     } catch (error) {
       console.error("Error in updateProfile:", error);
+      next(error);
+    }
+  }
+  static async getProfile(req, res, next) {
+    try {
+      const { userId } = req.user;
+      const user = await User.findByPk(userId);
+      if (!user) {
+        throw { name: "NOTFOUND", message: "User not found" };
+      }
+      res.status(200).json({
+        id: user.id,
+        email: user.email,
+      });
+    } catch (error) {
+      console.error("Error in getProfile:", error);
       next(error);
     }
   }

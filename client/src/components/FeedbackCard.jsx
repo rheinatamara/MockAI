@@ -1,5 +1,6 @@
 import React from "react";
 import http from "../http";
+import { useNavigate } from "react-router";
 
 export default function FeedbackCard({
   id,
@@ -8,6 +9,10 @@ export default function FeedbackCard({
   techstack,
   fetchData,
 }) {
+  const navigate = useNavigate();
+  function handleClick() {
+    navigate(`/${id}/feedback`);
+  }
   async function handleDelete() {
     try {
       await http({
@@ -63,7 +68,7 @@ export default function FeedbackCard({
       {/* Button */}
       <div className="flex gap-5">
         <button
-          // onClick={handleClick}
+          onClick={handleClick}
           className="w-full bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition-colors cursor-pointer"
         >
           View interview

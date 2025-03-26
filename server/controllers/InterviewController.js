@@ -246,12 +246,11 @@ class InterviewController {
         userId,
         interviewId,
       });
-      console.log("Feedback stored successfully:", feedback);
       await Interview.update(
         { finalized: true },
         { where: { id: interviewId } }
       );
-      return res.status(201).json({ message: "Feedback saved", feedback });
+      res.status(201).json(feedback);
     } catch (error) {
       next(error);
     }
