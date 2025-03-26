@@ -40,6 +40,7 @@ export default function Interview() {
         userId={1}
         type="interview"
         title="AI Interview"
+        interviewId={interviewId}
         questions={questions}
       />
     </div>

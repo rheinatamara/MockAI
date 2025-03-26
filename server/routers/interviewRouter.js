@@ -10,7 +10,7 @@ interview.get(
   InterviewController.getFeedbackByInterviewId
 );
 interview.post("/", InterviewController.createInterview);
-interview.post("'/:interviewId/feedback");
+interview.post("/:interviewId/feedback", InterviewController.generateFeedback);
 interview.delete("/:interviewId", InterviewController.deleteInterview);
 
 module.exports = interview;

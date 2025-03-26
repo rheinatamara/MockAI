@@ -4,6 +4,7 @@ import { useNavigate } from "react-router";
 import { vapi } from "../lib/vapi";
 import { interviewer } from "../constants";
 import avatar from "../assets/user-avatar.png";
+import http from "../http";
 const CallStatus = {
   INACTIVE: "INACTIVE",
   CONNECTING: "CONNECTING",
@@ -80,7 +81,17 @@ const Agent = ({
 
     const handleGenerateFeedback = async (messages) => {
       console.log("handleGenerateFeedback");
-      console.log(messages, "<<<<");
+
+      await http.post(
+        `/interview/${interviewId}/feedback`,
+        { transcript: JSON.stringify(messages) },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+            "Content-Type": "application/json",
+          },
+        }
+      );
       // CREATE FEEDBACK
       // const { success, feedbackId: id } = await createFeedback({
       //   interviewId: interviewId,

@@ -117,9 +117,6 @@ class InterviewController {
     try {
       const { type, role, level, techstack, amount } = req.body;
       const { userId } = req.user;
-
-      // console.log("Extracted fields:", type, role, level, techstack, amount);
-      // res.status(201).json({ message: "Interview created successfully" });
       const prompt = `Prepare questions for a job interview.
         The job role is ${role}.
         The job experience level is ${level}.
@@ -183,6 +180,79 @@ class InterviewController {
       res.status(200).json({ message: "Interview deleted successfully" });
     } catch (error) {
       console.error("Error in deleteInterview:", error);
+      next(error);
+    }
+  }
+  static async generateFeedback(req, res, next) {
+    try {
+      const { userId } = req.user;
+      const { interviewId } = req.params;
+      const transcript = JSON.parse(req.body.transcript);
+      const formattedTranscript = transcript
+        .map((item) => `- ${item.role}: ${item.content}`)
+        .join("\n");
+
+      console.log("Formatted Transcript:\n", formattedTranscript);
+      const prompt = `
+        You are an AI interviewer analyzing a mock interview. Your task is to evaluate the candidate based on structured categories. Be thorough and detailed in your analysis. Don't be lenient with the candidate. If there are mistakes or areas for improvement, point them out.
+        Transcript:
+        ${formattedTranscript}
+
+        **Instructions:**  
+        Return the response strictly in **valid JSON format** with the following structure:
+
+        \`\`\`json
+        {
+          "categoryScores": {
+            "CommunicationSkills": 0-100,
+            "TechnicalKnowledge": 0-100,
+            "ProblemSolving": 0-100,
+            "CulturalFit": 0-100,
+            "ConfidenceClarity": 0-100
+          },
+          "strengths": [
+            "List of candidate strengths"
+          ],
+          "areasForImprovement": [
+            "List of improvement areas"
+          ],
+          "finalAssessment": "Detailed final evaluation"
+        }
+        \`\`\`
+        Strictly follow this format and do not include additional text.
+      `;
+
+      const model = genAI.getGenerativeModel({ model: "gemini-2.0-flash" });
+      const result = await model.generateContent(prompt);
+      const responseText = await result.response.text();
+      let feedbackData;
+      try {
+        const cleanedResponse = responseText.replace(/```json|```/g, "").trim();
+        feedbackData = JSON.parse(cleanedResponse);
+      } catch (error) {
+        console.error("Error parsing Gemini response:", error);
+        return res.status(500).json({ error: "Invalid AI response format" });
+      }
+      const categoryScores = feedbackData.categoryScores;
+      const totalScore =
+        Object.values(categoryScores).reduce((a, b) => a + b, 0) /
+        Object.keys(categoryScores).length;
+      const feedback = await Feedback.create({
+        totalScore,
+        categoryScores,
+        strengths: feedbackData.strengths,
+        areasForImprovement: feedbackData.areasForImprovement,
+        finalAssessment: feedbackData.finalAssessment,
+        userId,
+        interviewId,
+      });
+      console.log("Feedback stored successfully:", feedback);
+      await Interview.update(
+        { finalized: true },
+        { where: { id: interviewId } }
+      );
+      return res.status(201).json({ message: "Feedback saved", feedback });
+    } catch (error) {
       next(error);
     }
   }
