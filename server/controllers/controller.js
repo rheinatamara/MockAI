@@ -67,7 +67,7 @@ class Controller {
         },
       });
       const access_token = sign({ id: user.id });
-      res.json({ access_token });
+      res.status(200).json({ access_token });
     } catch (error) {
       next(error);
     }
@@ -95,9 +95,7 @@ class Controller {
     try {
       const { userId } = req.user;
       const user = await User.findByPk(userId);
-      if (!user) {
-        throw { name: "NOTFOUND", message: "User not found" };
-      }
+
       res.status(200).json({
         id: user.id,
         email: user.email,

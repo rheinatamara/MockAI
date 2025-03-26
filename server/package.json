@@ -17,5 +17,15 @@
   "devDependencies": {
     "jest": "^29.7.0",
     "nodemon": "^3.1.9"
-  }
+  },
+  "name": "server",
+  "version": "1.0.0",
+  "main": "app.js",
+  "scripts": {
+    "test": "jest --verbose --detectOpenHandles --coverage"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
 }
