@@ -99,7 +99,6 @@ export default function Register() {
             <input
               id="password"
               type="password"
-              placeholder="Enter your password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="w-full px-4 py-3 bg-[#1a1a1a] text-white rounded-lg border border-[#333333] focus:outline-none focus:ring-1 focus:ring-purple-400 placeholder:text-white/30"

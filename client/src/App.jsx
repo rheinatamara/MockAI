@@ -8,7 +8,7 @@ import Login from "./pages/Login";
 import MainLayout from "./components/PrivateLayout";
 import PrivateLayout from "./components/PrivateLayout";
 import PublicLayout from "./components/PublicLayout";
-import AgentCall from "./pages/AgentCall";
+import Generate from "./pages/Generate";
 function App() {
   return (
     <Routes>
@@ -18,7 +18,7 @@ function App() {
       </Route>
       <Route element={<PrivateLayout />}>
         <Route path="/" element={<Home />} />
-        <Route path="/agent" element={<AgentCall />} />
+        <Route path="/generate" element={<Generate />} />
         <Route path="/interview/:interviewId" element={<Interview />} />
         <Route path="/:interviewId/feedback" element={<Feedback />} />
       </Route>

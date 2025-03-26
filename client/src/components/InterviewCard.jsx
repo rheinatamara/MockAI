@@ -1,10 +1,31 @@
 import React from "react";
 import { useNavigate } from "react-router";
+import http from "../http";
 
-export default function InterviewCard({ id, title, type, techstack }) {
+export default function InterviewCard({
+  id,
+  title,
+  type,
+  techstack,
+  fetchData,
+}) {
   const navigate = useNavigate();
   function handleClick() {
     navigate(`/interview/${id}`);
+  }
+  async function handleDelete() {
+    try {
+      await http({
+        method: "DELETE",
+        url: `/interview/${id}`,
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("access_token")}`,
+        },
+      });
+      fetchData();
+    } catch (error) {
+      console.log(error);
+    }
   }
   return (
     <div className="bg-[#121212] rounded-xl p-4 shadow-md hover:shadow-lg transition-shadow border border-gray-800">
@@ -36,20 +57,28 @@ export default function InterviewCard({ id, title, type, techstack }) {
         {techstack.map((tech, index) => (
           <div
             key={index}
-            className="rounded-full px-4 bg-[#6c47ff] py-2 flex items-center justify-center text-white text-xs"
+            className="rounded-full flex items-center justify-center text-gray-400 text-sm"
           >
-            <p>{tech}</p>
+            <p># {tech}</p>
           </div>
         ))}
       </div>
 
       {/* Button */}
-      <button
-        onClick={handleClick}
-        className="w-full bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition-colors cursor-pointer"
-      >
-        Take interview
-      </button>
+      <div className="flex gap-5">
+        <button
+          onClick={handleClick}
+          className="w-full bg-purple-500 text-white py-2 rounded-md hover:bg-purple-600 transition-colors cursor-pointer"
+        >
+          Take interview
+        </button>
+        <button
+          onClick={handleDelete}
+          className="w-full bg-red-400 text-white py-2 rounded-md hover:bg-red-600 transition-colors cursor-pointer"
+        >
+          Delete Interview
+        </button>
+      </div>
     </div>
   );
 }

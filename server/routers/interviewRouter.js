@@ -11,6 +11,6 @@ interview.get(
 );
 interview.post("/", InterviewController.createInterview);
 interview.post("'/:interviewId/feedback");
-interview.delete("'/:interviewId", InterviewController.deleteInterview);
+interview.delete("/:interviewId", InterviewController.deleteInterview);
 
 module.exports = interview;

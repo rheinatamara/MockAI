@@ -56,10 +56,10 @@ export default function Home() {
             Practice your job interview skills with AI and receive feedback
           </p>
           <Link
-            to="/agent"
+            to="/generate"
             className="bg-[#6c47ff] hover:bg-[#5a3dd3] text-white rounded-full px-6 py-4"
           >
-            Start an Interview
+            Generate interview questions
           </Link>
         </div>
 
@@ -82,6 +82,8 @@ export default function Home() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {completedData.map((interview) => (
             <FeedbackCard
+              fetchData={fetchCompletedData}
+              id={interview.id}
               key={interview.id}
               title={interview.role}
               type={interview.type}
@@ -97,6 +99,7 @@ export default function Home() {
           {interviewData.map((interview) => (
             <InterviewCard
               key={interview.id}
+              fetchData={fetchActiveData}
               id={interview.id}
               title={interview.role}
               type={interview.type}

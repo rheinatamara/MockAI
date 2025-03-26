@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
 import { vapi } from "../lib/vapi";
 import { interviewer } from "../constants";
@@ -25,19 +25,7 @@ const Agent = ({
   const [messages, setMessages] = useState([]);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [lastMessage, setLastMessage] = useState("");
-  const [collectedData, setCollectedData] = useState({
-    role: "",
-    type: "",
-    level: "",
-    amount: "",
-    techstack: "",
-  });
-  const collectedDataRef = useRef(collectedData);
 
-  useEffect(() => {
-    collectedDataRef.current = collectedData;
-    console.log("Collected Data updated (useEffect):", collectedData);
-  }, [collectedData]);
   useEffect(() => {
     const onCallStart = () => {
       setCallStatus(CallStatus.ACTIVE);
@@ -92,7 +80,7 @@ const Agent = ({
 
     const handleGenerateFeedback = async (messages) => {
       console.log("handleGenerateFeedback");
-      console.log(messages);
+      console.log(messages, "<<<<");
       // CREATE FEEDBACK
       // const { success, feedbackId: id } = await createFeedback({
       //   interviewId: interviewId,
@@ -125,37 +113,8 @@ const Agent = ({
         await vapi.start(import.meta.env.VITE_VAPI_WORKFLOW_ID, {
           variableValues: {
             username: userName,
-            userId: userId,
-            role: "Frontend Developer",
-            type: "Technical",
-            level: "Mid-level",
-            amount: "5",
-            techstack: "React, Node.js",
-            access_token:
-              "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzQyOTI5OTI5fQ.3vl6XSEN9PKeAwNJn1AI1DhbJ1KkQOoJH7lSLAN4S58",
+            userid: userId,
           },
-        });
-
-        // Listen for variable updates
-        vapi.on("variable-updated", (update) => {
-          setCollectedData((prev) => {
-            const updatedData = { ...prev, ...update.variables };
-            console.log(
-              "Updated state (inside variable-updated):",
-              updatedData
-            );
-            return updatedData;
-          });
-        });
-
-        // Listen for call-ended event
-        vapi.on("call-ended", (endData) => {
-          if (endData && endData.variables) {
-            console.log("Final Collected Data:", endData.variables);
-            setCollectedData(endData.variables); // Store the final data in state
-          } else {
-            console.error("Call ended without data.");
-          }
         });
 
         setCallStatus(CallStatus.ACTIVE);
