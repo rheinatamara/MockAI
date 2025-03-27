@@ -163,7 +163,7 @@ class InterviewController {
       res.status(201).json(interview);
     } catch (error) {
       console.error("Error in createInterview:", error);
-      // next(error);
+      next(error);
     }
   }
   static async deleteInterview(req, res, next) {

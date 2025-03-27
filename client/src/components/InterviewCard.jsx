@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router";
 import http from "../http";
+import Swal from "sweetalert2";
 
 export default function InterviewCard({
   id,
@@ -21,6 +22,11 @@ export default function InterviewCard({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Account created successfully",
       });
       fetchData();
     } catch (error) {

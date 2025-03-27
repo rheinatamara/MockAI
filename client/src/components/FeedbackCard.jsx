@@ -1,6 +1,7 @@
 import React from "react";
 import http from "../http";
 import { useNavigate } from "react-router";
+import Swal from "sweetalert2";
 
 export default function FeedbackCard({
   id,
@@ -21,6 +22,11 @@ export default function FeedbackCard({
         headers: {
           Authorization: `Bearer ${localStorage.getItem("access_token")}`,
         },
+      });
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Account created successfully",
       });
       fetchData();
     } catch (error) {
