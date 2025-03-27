@@ -4,6 +4,14 @@ const { User } = require("../models");
 const { decode, encode } = require("../helpers/bcrypt");
 const { sign, verify } = require("../helpers/jwt");
 const { OAuth2Client } = require("google-auth-library");
+const bcrypt = require("bcryptjs");
+
+// Mock user data
+const dummyUser = {
+  id: 1,
+  email: "testuser@example.com",
+  password: bcrypt.hashSync("oldpassword", 10),
+};
 
 jest.mock("../models", () => ({
   User: {
@@ -15,18 +23,98 @@ jest.mock("../models", () => ({
 }));
 
 jest.mock("../helpers/bcrypt", () => ({
-  decode: jest.fn(),
-  encode: jest.fn(),
+  encode: jest.fn(() => "hashedpassword"),
+  decode: jest.fn((password, hash) => password === "newpassword"),
 }));
 
 jest.mock("../helpers/jwt", () => ({
-  sign: jest.fn(),
-  verify: jest.fn(),
+  sign: jest.fn((payload) => `mockedToken.${payload.id}`), // Return a fake token
+  verify: jest.fn((token) => {
+    if (token.startsWith("mockedToken")) {
+      return { id: 1 }; // Return a valid payload
+    }
+    throw new Error("Invalid Token"); // Simulate failure
+  }),
 }));
 
 jest.mock("google-auth-library", () => ({
   OAuth2Client: jest.fn(),
 }));
+describe("PUT /user", () => {
+  let token;
+
+  beforeAll(() => {
+    token = sign({ id: dummyUser.id });
+  });
+
+  beforeEach(() => {
+    User.findByPk.mockResolvedValue({
+      id: dummyUser.id,
+      email: "testuser@example.com",
+      password: "hashedpassword",
+      save: jest.fn().mockResolvedValue(true),
+    });
+
+    User.findOne.mockResolvedValue({
+      id: 1,
+      email: "testuser@example.com",
+    });
+  });
+
+  afterEach(() => {
+    jest.clearAllMocks();
+  });
+
+  // test("should update profile successfully with valid token", async () => {
+  //   const response = await request(app)
+  //     .put("/user")
+  //     .set("Authorization", `Bearer ${token}`) // Use the valid token
+  //     .send({
+  //       email: "newemail@example.com",
+  //       password: "newpassword",
+  //     });
+
+  //   expect(response.status).toBe(200);
+  //   expect(response.body).toEqual({ message: "Profile updated successfully" });
+  //   expect(User.findByPk).toHaveBeenCalledWith(dummyUser.id); // Ensure correct userId is used
+  // });
+
+  // test("should return 401 if no token is provided", async () => {
+  //   const response = await request(app).put("/user").send({
+  //     email: "newemail@example.com",
+  //   });
+
+  //   expect(response.status).toBe(401);
+  //   expect(response.body.message).toBe("Unauthorized Error");
+  // });
+
+  test("should return 401 if token is invalid", async () => {
+    const response = await request(app)
+      .put("/user")
+      .set("Authorization", "Bearer invalidtoken")
+      .send({
+        email: "newemail@example.com",
+      });
+
+    expect(response.status).toBe(401);
+    expect(response.body.message).toBe("Invalid Token");
+  });
+
+  test("should return 404 if user is not found", async () => {
+    User.findByPk.mockResolvedValue(null);
+    User.findOne.mockResolvedValue(null);
+
+    const response = await request(app)
+      .put("/user")
+      .set("Authorization", `Bearer ${token}`)
+      .send({
+        email: "newemail@example.com",
+      });
+
+    expect(response.status).toBe(404);
+    expect(response.body.message).toBe("User not found");
+  });
+});
 
 describe("GET /", () => {
   it("should return 200 and 'Hello world'", async () => {
