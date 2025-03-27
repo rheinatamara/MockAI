@@ -1,6 +1,6 @@
 const jwt = require("jsonwebtoken");
-const JWT_SECRET = process.env.SECRET_KEY;
-
+const JWT_SECRET = "fallback_secret";
+console.log(JWT_SECRET, "<<< ini JWT_SECRET");
 function sign(payload) {
   return jwt.sign(payload, JWT_SECRET);
 }

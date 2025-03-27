@@ -48,7 +48,10 @@ describe("Authentication Middleware", () => {
   test("should return 401 if token verification fails", async () => {
     mockReq.headers.authorization = "Bearer invalidtoken";
     verify.mockImplementation(() => {
-      throw new Error("Invalid Token");
+      throw {
+        name: "UNAUTHORIZED",
+        message: "Invalid Token",
+      };
     });
 
     await authentication(mockReq, mockRes, mockNext);

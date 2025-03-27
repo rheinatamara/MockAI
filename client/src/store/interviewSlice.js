@@ -2,7 +2,7 @@ import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import http from "../http";
 
 const interviewSlice = createSlice({
-  name: "movie",
+  name: "active",
   initialState: {
     data: [],
   },

@@ -62,53 +62,53 @@ jest.mock("@google/generative-ai", () => {
   };
 });
 
-// describe("POST /interview", () => {
-//   beforeEach(() => {
-//     jest.clearAllMocks();
-//   });
+describe("POST /interview", () => {
+  beforeEach(() => {
+    jest.clearAllMocks();
+  });
 
-//   it("should return 201 and create an interview", async () => {
-//     const mockRequestBody = {
-//       type: "behavioral",
-//       role: "Frontend Developer",
-//       level: "Junior",
-//       techstack: "React, Node.js",
-//       amount: 5,
-//     };
+  it("should return 201 and create an interview", async () => {
+    const mockRequestBody = {
+      type: "behavioral",
+      role: "Frontend Developer",
+      level: "Junior",
+      techstack: "React, Node.js",
+      amount: 5,
+    };
 
-//     const expectedResponse = {
-//       id: 22,
-//       ...mockRequestBody,
-//       techstack: ["React", "Node.js"],
-//       questions: [
-//         "Describe a time you faced a challenging technical problem while working on a project. What steps did you take to troubleshoot and resolve it?",
-//         "Tell me about a situation where you had to learn a new technology or skill quickly. How did you approach the learning process?",
-//         "Describe a time you had to work with a team to complete a project. What was your role, and how did you contribute to the team's success?",
-//         "Give an example of a time you received constructive criticism on your code or work. How did you react, and what did you learn from the experience?",
-//         "Describe a situation where you made a mistake on a project. What did you do to address the mistake, and what did you learn from it?",
-//       ],
-//       userId: 1,
-//       finalized: false,
-//       createdAt: new Date().toISOString(),
-//       updatedAt: new Date().toISOString(),
-//     };
+    const expectedResponse = {
+      id: 22,
+      ...mockRequestBody,
+      techstack: ["React", "Node.js"],
+      questions: [
+        "Describe a time you faced a challenging technical problem while working on a project. What steps did you take to troubleshoot and resolve it?",
+        "Tell me about a situation where you had to learn a new technology or skill quickly. How did you approach the learning process?",
+        "Describe a time you had to work with a team to complete a project. What was your role, and how did you contribute to the team's success?",
+        "Give an example of a time you received constructive criticism on your code or work. How did you react, and what did you learn from the experience?",
+        "Describe a situation where you made a mistake on a project. What did you do to address the mistake, and what did you learn from it?",
+      ],
+      userId: 1,
+      finalized: false,
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
 
-//     Interview.create.mockImplementation(async (data) => {
-//       return expectedResponse;
-//     });
+    Interview.create.mockImplementation(async (data) => {
+      return expectedResponse;
+    });
 
-//     const response = await request(app)
-//       .post("/interview")
-//       .set("Authorization", "Bearer mockedToken")
-//       .send(mockRequestBody);
+    const response = await request(app)
+      .post("/interview")
+      .set("Authorization", "Bearer mockedToken")
+      .send(mockRequestBody);
 
-//     console.log("Response Body:", response.body);
-//     console.log("Response Status:", response.status);
+    console.log("Response Body:", response.body);
+    console.log("Response Status:", response.status);
 
-//     expect(response.status).toBe(201);
-//     expect(response.body).toEqual(expectedResponse);
-//   });
-// });
+    expect(response.status).toBe(201);
+    expect(response.body).toEqual(expectedResponse);
+  });
+});
 describe("GET /interview/:interviewId", () => {
   beforeEach(() => {
     verify.mockReturnValue({ id: 1, email: "test@example.com" });

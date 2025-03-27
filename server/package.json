@@ -22,7 +22,7 @@
   "version": "1.0.0",
   "main": "app.js",
   "scripts": {
-    "test": "jest --coverage"
+    "test": "jest --runInBand --coverage"
   },
   "keywords": [],
   "author": "",
