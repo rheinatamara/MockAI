@@ -16,17 +16,19 @@ const authentication = async (req, res, next) => {
     console.log("APAKAH INI MASUK? 2");
 
     let payload;
-    // try {
-    payload = verify(rawToken[1]);
-    console.log("APAKAH INI MASUK? 3");
-    // } catch (err) {
-    //   throw { name: "UNAUTHORIZED", message: "Invalid Token" };
-    // }
+    try {
+      payload = verify(rawToken[1]);
+      console.log("APAKAH INI MASUK? 3");
+    } catch (err) {
+      throw { name: "UNAUTHORIZED", message: "Invalid Token" };
+    }
     const foundUser = await User.findOne({
       where: {
         id: payload.id,
       },
     });
+    console.log("APAKAH INI MASUK? 4");
+
     if (!foundUser) {
       throw { name: "NOTFOUND", message: "User not found" };
     }

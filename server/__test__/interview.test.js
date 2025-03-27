@@ -3,6 +3,7 @@ const app = require("../app");
 const { Interview, Feedback, User } = require("../models");
 const { verify, sign } = require("../helpers/jwt");
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+
 jest.mock("../models", () => ({
   Interview: {
     findAll: jest.fn(),
@@ -16,38 +17,33 @@ jest.mock("../models", () => ({
   },
   Feedback: {
     create: jest.fn(),
-  }, // Add mock for Feedback model
+  },
 }));
 
 jest.mock("../helpers/jwt", () => ({
   sign: jest.fn((payload) => `mockedToken.${payload.id}`),
   verify: jest.fn((token) => {
     if (token.startsWith("mockedToken")) {
-      return { userId: 1 }; // ✅ Updated to match `req.user.userId`
+      return { id: 1 }; // Mock user ID
     }
     throw new Error("Invalid Token");
   }),
 }));
+
 jest.mock("@google/generative-ai", () => {
   const mockGenerateContent = jest.fn().mockResolvedValue({
     response: {
-      text: jest.fn().mockResolvedValue(
-        JSON.stringify({
-          categoryScores: {
-            CommunicationSkills: 80,
-            TechnicalKnowledge: 70,
-            ProblemSolving: 60,
-            CulturalFit: 90,
-            ConfidenceClarity: 70,
-          },
-          strengths: [
-            "Strong communication skills",
-            "Good problem-solving approach",
-          ],
-          areasForImprovement: ["Needs deeper technical knowledge"],
-          finalAssessment: "Candidate performed well but has areas to improve.",
-        })
-      ),
+      text: jest
+        .fn()
+        .mockResolvedValue(
+          JSON.stringify([
+            "Describe a time you faced a challenging technical problem while working on a project. What steps did you take to troubleshoot and resolve it?",
+            "Tell me about a situation where you had to learn a new technology or skill quickly. How did you approach the learning process?",
+            "Describe a time you had to work with a team to complete a project. What was your role, and how did you contribute to the team's success?",
+            "Give an example of a time you received constructive criticism on your code or work. How did you react, and what did you learn from the experience?",
+            "Describe a situation where you made a mistake on a project. What did you do to address the mistake, and what did you learn from it?",
+          ])
+        ),
     },
   });
 
@@ -64,6 +60,13 @@ jest.mock("@google/generative-ai", () => {
 
 describe("POST /interview", () => {
   beforeEach(() => {
+    jest.clearAllMocks();
+    User.findOne.mockResolvedValue({
+      id: 1,
+      email: "test@example.com",
+    }); // Mock user for JWT verification
+  });
+  afterAll(async () => {
     jest.clearAllMocks();
   });
 
@@ -108,7 +111,59 @@ describe("POST /interview", () => {
     expect(response.status).toBe(201);
     expect(response.body).toEqual(expectedResponse);
   });
+
+  it("should return 401 if no authorization token is provided", async () => {
+    const response = await request(app).post("/interview").send({
+      type: "behavioral",
+      role: "Frontend Developer",
+      level: "Junior",
+      techstack: "React, Node.js",
+      amount: 5,
+    });
+
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ message: "Unauthorized Error" });
+  });
+
+  it("should return 401 if the token is invalid", async () => {
+    verify.mockImplementation(() => {
+      throw new Error("Invalid Token");
+    });
+
+    const response = await request(app)
+      .post("/interview")
+      .set("Authorization", "Bearer invalidToken")
+      .send({
+        type: "behavioral",
+        role: "Frontend Developer",
+        level: "Junior",
+        techstack: "React, Node.js",
+        amount: 5,
+      });
+
+    expect(response.status).toBe(401);
+    expect(response.body).toEqual({ message: "Invalid Token" });
+  });
+
+  // it("should return 500 if an unexpected error occurs", async () => {
+  //   Interview.create.mockRejectedValue(new Error("Database error"));
+
+  //   const response = await request(app)
+  //     .post("/interview")
+  //     .set("Authorization", "Bearer mockedToken")
+  //     .send({
+  //       type: "behavioral",
+  //       role: "Frontend Developer",
+  //       level: "Junior",
+  //       techstack: "React, Node.js",
+  //       amount: 5,
+  //     });
+
+  //   expect(response.status).toBe(500);
+  //   expect(response.body).toEqual({ message: "Internal server error" });
+  // });
 });
+
 describe("GET /interview/:interviewId", () => {
   beforeEach(() => {
     verify.mockReturnValue({ id: 1, email: "test@example.com" });

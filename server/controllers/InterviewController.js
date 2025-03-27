@@ -115,6 +115,7 @@ class InterviewController {
   }
   static async createInterview(req, res, next) {
     try {
+      console.log("MASUK CREATE");
       const { type, role, level, techstack, amount } = req.body;
       const { userId } = req.user;
       const prompt = `Prepare questions for a job interview.
@@ -162,7 +163,7 @@ class InterviewController {
       res.status(201).json(interview);
     } catch (error) {
       console.error("Error in createInterview:", error);
-      next(error);
+      // next(error);
     }
   }
   static async deleteInterview(req, res, next) {
