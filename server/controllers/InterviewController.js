@@ -101,7 +101,7 @@ class InterviewController {
         ],
       });
 
-      if (!interview) {
+      if (!interview || interview.length === 0) {
         throw {
           name: "NOTFOUND",
           message: "Interview not found or not finalized",
