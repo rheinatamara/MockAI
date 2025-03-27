@@ -78,35 +78,55 @@ export default function Home() {
         </div>
       </section>
       <section className="px-4 md:px-8 py-6">
-        <h2 className="text-xl font-bold mb-4">Your Past Interviews</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {completedData.map((interview) => (
-            <FeedbackCard
-              fetchData={fetchCompletedData}
-              id={interview.id}
-              key={interview.id}
-              title={interview.role}
-              type={interview.type}
-              techstack={interview.techstack}
-              onClick={() => console.log(`Starting ${interview.title}`)}
-            />
-          ))}
-        </div>
-      </section>
-      <section className="px-4 md:px-8 py-6">
-        <h2 className="text-xl font-bold mb-4">Pick Your Interview</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          {interviewData.map((interview) => (
-            <InterviewCard
-              key={interview.id}
-              fetchData={fetchActiveData}
-              id={interview.id}
-              title={interview.role}
-              type={interview.type}
-              techstack={interview.techstack}
-            />
-          ))}
-        </div>
+        {/* Show message if both are empty */}
+        {interviewData.length === 0 && completedData.length === 0 ? (
+          <p className="text-center text-gray-500 text-lg">
+            You don’t have any interviews yet.
+          </p>
+        ) : (
+          <>
+            {/* Completed Interviews Section (Show only if not empty) */}
+            {completedData.length > 0 && (
+              <>
+                <h2 className="text-xl font-bold mb-4">Your Past Interviews</h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {completedData.map((interview) => (
+                    <FeedbackCard
+                      fetchData={fetchCompletedData}
+                      id={interview.id}
+                      key={interview.id}
+                      title={interview.role}
+                      type={interview.type}
+                      techstack={interview.techstack}
+                      onClick={() => console.log(`Starting ${interview.title}`)}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+
+            {/* Active Interviews Section (Show only if not empty) */}
+            {interviewData.length > 0 && (
+              <>
+                <h2 className="text-xl font-bold mb-4 mt-6">
+                  Pick Your Interview
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  {interviewData.map((interview) => (
+                    <InterviewCard
+                      key={interview.id}
+                      fetchData={fetchActiveData}
+                      id={interview.id}
+                      title={interview.role}
+                      type={interview.type}
+                      techstack={interview.techstack}
+                    />
+                  ))}
+                </div>
+              </>
+            )}
+          </>
+        )}
       </section>
     </div>
   );
