@@ -38,7 +38,6 @@ class Controller {
       const access_token = sign({ id: found.id });
       res.status(200).json({ access_token });
     } catch (error) {
-      console.log(error, "<<<");
       next(error);
     }
   }
@@ -46,7 +45,6 @@ class Controller {
     try {
       const client = new OAuth2Client();
       const { googleToken } = req.body;
-      console.log(googleToken, "<<<");
       if (!googleToken) {
         throw { name: "BADREQUEST", message: "Google token is required" };
       }
@@ -74,15 +72,19 @@ class Controller {
   }
   static async updateProfile(req, res, next) {
     try {
+      console.log("Extracted userId:", req.user?.userId);
       const { userId } = req.user;
       const { email, password } = req.body;
+
       const user = await User.findByPk(userId);
       if (!user) {
         throw { name: "NOTFOUND", message: "User not found" };
       }
+
       if (email) user.email = email;
       if (password) user.password = encode(password);
       await user.save();
+
       res.status(200).json({
         message: "Profile updated successfully",
       });
