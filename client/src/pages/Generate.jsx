@@ -90,13 +90,13 @@ export default function Generate() {
               htmlFor="role"
               className="block text-sm text-white/70 font-light"
             >
-              What role are you focusing on?
+              What job position are you focusing on?
             </label>
             <input
               id="role"
               name="role"
               type="text"
-              placeholder="Select your role"
+              placeholder="e.g., Software Engineer, Data Scientist, etc."
               value={formData.role}
               onChange={handleChange}
               className="w-full px-4 py-3 bg-[#1a1a1a] text-white rounded-lg border border-[#333333] focus:outline-none focus:ring-1 focus:ring-purple-400"
