@@ -26,7 +26,7 @@ export default function InterviewCard({
       Swal.fire({
         icon: "success",
         title: "Success",
-        text: "Account created successfully",
+        text: "Interview Deleted",
       });
       fetchData();
     } catch (error) {
