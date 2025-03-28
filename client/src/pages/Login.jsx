@@ -49,17 +49,17 @@ export default function Login() {
     }
   }
   useEffect(() => {
-    window.onload = function () {
-      google.accounts.id.initialize({
+    if (window.google) {
+      window.google.accounts.id.initialize({
         client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
         callback: handleCredentialResponse,
       });
-      google.accounts.id.renderButton(
+
+      window.google.accounts.id.renderButton(
         document.getElementById("google-btn"),
-        { theme: "outline", size: "large", shape: "pill", width: "100%" } // customization attributes
+        { theme: "outline", size: "large", shape: "pill", width: "100%" }
       );
-      // google.accounts.id.prompt(); // also display the One Tap dialog
-    };
+    }
   }, []);
   return (
     <div className="flex items-center justify-center min-h-screen ">
