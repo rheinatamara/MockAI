@@ -46,22 +46,22 @@ export default function Register() {
             Practice job interviews with AI
           </h1>
         </div>
-        <div className="absolute top-10 right-[20%] animate-float-slow">
+        <div className="absolute top-10 right-[20%] animate-float-slow -z-10">
           <div className="bg-green-200 p-2 rounded-lg w-10 h-10"></div>
         </div>
-        <div className="absolute bottom-50 right-[20%] animate-float-slow">
+        <div className="absolute bottom-50 right-[20%] animate-float-slow -z-10">
           <div className="bg-purple-200 p-2 rounded-lg w-10 h-10"></div>
         </div>
-        <div className="absolute top-16 right-[10%] animate-float">
+        <div className="absolute top-16 right-[10%] animate-float -z-10">
           <div className="bg-pink-200 p-2 rounded-lg w-8 h-8"></div>
         </div>
-        <div className="absolute bottom-10 left-[20%] animate-float-slow">
+        <div className="absolute bottom-10 left-[20%] animate-float-slow -z-10">
           <div className="bg-yellow-200 p-2 rounded-lg w-9 h-9"></div>
         </div>
-        <div className="absolute top-80 left-[20%] animate-float-slow">
+        <div className="absolute top-80 left-[20%] animate-float-slow -z-10">
           <div className="bg-purple-200 p-2 rounded-lg w-9 h-9"></div>
         </div>
-        <div className="absolute bottom-16 left-[10%] animate-float">
+        <div className="absolute bottom-16 left-[10%] animate-float -z-10">
           <div className="bg-blue-200 p-2 rounded-lg w-7 h-7"></div>
         </div>
 

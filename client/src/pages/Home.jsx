@@ -52,19 +52,19 @@ export default function Home() {
         </div>
       </section>
 
-      <div className="absolute bottom-50 right-[20%] animate-float-slow">
+      <div className="absolute bottom-50 right-[20%] animate-float-slow -z-10">
         <div className="bg-purple-200 p-2 rounded-lg w-10 h-10"></div>
       </div>
-      <div className="absolute top-50 right-[10%] animate-float">
+      <div className="absolute top-50 right-[10%] animate-float -z-10">
         <div className="bg-blue-200 p-2 rounded-lg w-8 h-8"></div>
       </div>
-      <div className="absolute bottom-10 left-[20%] animate-float-slow">
+      <div className="absolute bottom-10 left-[20%] animate-float-slow -z-10">
         <div className="bg-yellow-200 p-2 rounded-lg w-9 h-9"></div>
       </div>
-      <div className="absolute top-80 left-[20%] animate-float-slow">
+      <div className="absolute top-80 left-[20%] animate-float-slow -z-10">
         <div className="bg-purple-200 p-2 rounded-lg w-9 h-9"></div>
       </div>
-      <div className="absolute bottom-16 left-[10%] animate-float">
+      <div className="absolute bottom-16 left-[10%] animate-float -z-10">
         <div className="bg-blue-200 p-2 rounded-lg w-7 h-7"></div>
       </div>
       <section className="px-4 md:px-8 py-6">
